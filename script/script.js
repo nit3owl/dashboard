@@ -12,19 +12,25 @@ window.onload = function() {
 	if(typeof(Storage) !== 'undefined') {
 		//load saved elements
 		console.log(localStorage);
-		for(var i = 0; i < localStorage.length; i++){
-			var key = localStorage.key(i);
-			var temp = JSON.parse(localStorage.getItem(key));
-			var obj = restoreObject(temp);
-			if(obj instanceof Weather){
-				//check to see if forecast should be refreshed
-				if(obj.current.updated + TIMEOUT <= Date.now())
-					obj.getCurrentWeather(obj.zipCode, obj.countryCode);
+		if(localStorage.getItem('positions') === null){
+			var positions = [];
+			localStorage.setItem('positions', JSON.stringify(positions));
+		}else{
+			var positions = JSON.parse(localStorage.getItem('positions'));
+			for(var i = 0; i < positions.length; i++){
+				var key = positions[i];
+				var temp = JSON.parse(localStorage.getItem(key));
+				var obj = restoreObject(temp);
+				if(obj instanceof Weather){
+					//check to see if forecast should be refreshed
+					if(obj.current.updated + TIMEOUT <= Date.now())
+						obj.getCurrentWeather(obj.zipCode, obj.countryCode);
+				}
+				renderElement(obj);
 			}
-			renderElement(obj);
 		}
-
-	} else {
+		console.log(localStorage);
+	}else {
 	    console.log('localStorage not supported');
 	    alert('Your broswer does not support localStorage; saving will fail.');
 	}
@@ -114,6 +120,9 @@ function addElement(type){
 			break;
 		}
 		localStorage.setItem(obj.id, JSON.stringify(obj));
+		var positions = JSON.parse(localStorage.getItem('positions'));
+		positions.push(obj.id);
+		localStorage.setItem('positions', JSON.stringify(positions));
 		console.log(localStorage);
 		renderElement(obj);
 	}
@@ -148,20 +157,14 @@ function swapElements(obj1, obj2) {
     temp.parentNode.insertBefore(obj2, temp);
     // remove temporary marker node
     temp.parentNode.removeChild(temp);
-    //swap elements in localStorage to maintain order on reload
-    var tobj1 = JSON.parse(localStorage.getItem(obj1.id));
-    var tobj2 = JSON.parse(localStorage.getItem(obj2.id));
-
-    if(tobj1.position !== tobj2.position){
-    	var pos = tobj1.position;
-    	tobj1.position = tobj2.position;
-    	tobj2.position = pos;
-    	tobj1.classes = obj1.className;
-    	tobj2.classes = obj2.className;
-    }
-
-    localStorage.setItem(obj1.id, JSON.stringify(tobj2));
-    localStorage.setItem(obj2.id, JSON.stringify(tobj1));
+    //swap keys in positions array to maintain order on reload
+    var positions = JSON.parse(localStorage.getItem('positions'));
+    var pos1 = positions.indexOf(obj1.id);
+    var pos2 = positions.indexOf(obj2.id);
+    var temp = positions[pos1];
+    positions[pos1] = positions[pos2];
+    positions[pos2] = temp;
+    localStorage.setItem('positions', JSON.stringify(positions));
 }
 function swapLeftRight(obj1, obj2){
 	if(hasClass(obj1, 'left') && !hasClass(obj2, 'left')){
