@@ -7,18 +7,17 @@ var elementCounts = {
 }
 
 var TIMEOUT = 300000;
+var MAX_DOCKS = 4;
 
 window.onload = function() {
 	if(typeof(Storage) !== 'undefined') {
 		//load saved elements
-		console.log(localStorage);
 		if(localStorage.getItem('positions') === null){
-			var positions = [];
+			var positions = {};
 			localStorage.setItem('positions', JSON.stringify(positions));
 		}else{
 			var positions = JSON.parse(localStorage.getItem('positions'));
-			for(var i = 0; i < positions.length; i++){
-				var key = positions[i];
+			for(var key in positions){
 				var temp = JSON.parse(localStorage.getItem(key));
 				var obj = restoreObject(temp);
 				if(obj instanceof Weather){
@@ -26,10 +25,9 @@ window.onload = function() {
 					if(obj.current.updated + TIMEOUT <= Date.now())
 						obj.getCurrentWeather(obj.zipCode, obj.countryCode);
 				}
-				renderElement(obj);
+				renderElement(obj, positions[key]);
 			}
 		}
-		console.log(localStorage);
 	}else {
 	    console.log('localStorage not supported');
 	    alert('Your broswer does not support localStorage; saving will fail.');
@@ -79,6 +77,9 @@ function drop(event) {
 }
 function deleteElement(object){
 	localStorage.removeItem(object.id);
+	var positions = JSON.parse(localStorage.getItem('positions'));	
+	delete positions[object.id];
+	localStorage.setItem('positions', JSON.stringify(positions));
 	var left = hasClass(object, 'left');
 	if(left){
 		object.parentNode.replaceChild(new DraggableDock('left').render(), object);
@@ -93,8 +94,10 @@ function deleteAllDraggables(){
 		var count = draggables.length;
 		for(var i = 0; i < count; i++){
 			deleteElement(draggables[0]);
-			localStorage.clear();
 		}
+		localStorage.clear();
+		var positions = {};
+		localStorage.setItem('positions', JSON.stringify(positions));
 	}
 }
 function addElement(type){
@@ -119,24 +122,36 @@ function addElement(type){
 				}
 			break;
 		}
-		localStorage.setItem(obj.id, JSON.stringify(obj));
-		var positions = JSON.parse(localStorage.getItem('positions'));
-		positions.push(obj.id);
-		localStorage.setItem('positions', JSON.stringify(positions));
-		console.log(localStorage);
 		renderElement(obj);
+
+		localStorage.setItem(obj.id, JSON.stringify(obj));
+		updatePosition(obj, (MAX_DOCKS - elementCounts.docks - 1));
 	}
 }
-function renderElement(object){
-	var docks = document.getElementsByClassName('draggable-div-dock');
-	if(docks.length > 0){
-		var dock = docks[0];
-		dock.parentNode.replaceChild(object.render(), dock);
+function renderElement(object, position){	
+	if(position === undefined){
+		var docks = document.getElementsByClassName('draggable-div-dock');
+		if(docks.length > 0){
+			var dock = docks[0];
+			dock.parentNode.replaceChild(object.render(), dock);
+		}
+	}else{
+		var draggables = document.querySelectorAll('div.draggable-div, div.draggable-div-dock');
+		var draggable = draggables[position];
+		draggable.parentNode.replaceChild(object.render(), draggable);
+		updatePosition(object, position);
 	}
+	elementCounts.docks--;	
+}
+function updatePosition(object, position){
+	var positions = JSON.parse(localStorage.getItem('positions'))
+	positions[object.id] = position;
+	localStorage.setItem('positions', JSON.stringify(positions));
 }
 function replaceElement(target, element){
-	deleteElement(target);
-	renderElement(element);
+	var position = JSON.parse(localStorage.getItem('positions'))[target.id];
+	deleteElement(target);	
+	renderElement(element, position);
 }
 function addNote(){
 	addElement('note');
@@ -146,6 +161,24 @@ function addWeather(){
 }
 //https://stackoverflow.com/questions/10716986/swap-2-html-elements-and-preserve-event-listeners-on-them
 function swapElements(obj1, obj2) {
+	//swap keys in positions array to maintain order on reload
+    var positions = JSON.parse(localStorage.getItem('positions'));
+    if(obj2.id.split('-')[0] === 'dock'){
+    	var draggables = document.querySelectorAll('div.draggable-div, div.draggable-div-dock');
+    	for(var i = 0; i < draggables.length; i++){
+    		if(draggables[i].id === obj2.id){
+    			positions[obj1.id] = i;
+    			break;
+    		}
+    	}
+    }else{
+    	var temp = positions[obj1.id];
+    	positions[obj1.id] = positions[obj2.id];
+    	positions[obj2.id] = temp;
+    }    
+    localStorage.setItem('positions', JSON.stringify(positions));
+
+    //now actually swap the items
 	//if necessary, swap left/right classes
 	swapLeftRight(obj1, obj2);
     // create marker element and insert it where obj1 is
@@ -157,28 +190,42 @@ function swapElements(obj1, obj2) {
     temp.parentNode.insertBefore(obj2, temp);
     // remove temporary marker node
     temp.parentNode.removeChild(temp);
-    //swap keys in positions array to maintain order on reload
-    var positions = JSON.parse(localStorage.getItem('positions'));
-    var pos1 = positions.indexOf(obj1.id);
-    var pos2 = positions.indexOf(obj2.id);
-    var temp = positions[pos1];
-    positions[pos1] = positions[pos2];
-    positions[pos2] = temp;
-    localStorage.setItem('positions', JSON.stringify(positions));
+
+    //swap classes as necssary
 }
 function swapLeftRight(obj1, obj2){
 	if(hasClass(obj1, 'left') && !hasClass(obj2, 'left')){
 		obj1.className = obj1.className.replace( /(?:^|\s)left(?!\S)/g , '' );
 		obj1.className += ' right';
+		var object = JSON.parse(localStorage.getItem(obj1.id));
+		if(object !== null){
+			object.classes[object.classes.indexOf('left')] = 'right';
+			localStorage.setItem(object.id, JSON.stringify(object));
+		}
 
 		obj2.className = obj2.className.replace( /(?:^|\s)right(?!\S)/g , '' );
 		obj2.className += ' left';
+		object = JSON.parse(localStorage.getItem(obj2.id));
+		if(object !== null){
+			object.classes[object.classes.indexOf('right')] = 'left';
+			localStorage.setItem(object.id, JSON.stringify(object));
+		}
 	}else if(hasClass(obj1, 'right') && !hasClass(obj2, 'right')){
 		obj1.className = obj1.className.replace( /(?:^|\s)right(?!\S)/g , '' );
 		obj1.className += ' left';
+		var object = JSON.parse(localStorage.getItem(obj1.id));
+		if(object !== null){
+			object.classes[object.classes.indexOf('right')] = 'left';
+			localStorage.setItem(object.id, JSON.stringify(object));
+		}
 
 		obj2.className = obj2.className.replace( /(?:^|\s)left(?!\S)/g , '' );
 		obj2.className += ' right';
+		object = JSON.parse(localStorage.getItem(obj2.id));
+		if(object !== null){
+			object.classes[object.classes.indexOf('left')] = 'right';
+			localStorage.setItem(object.id, JSON.stringify(object));
+		}
 	}
 }
 function hasClass(object, clazz) {
@@ -206,14 +253,14 @@ var restoreObject = function(object){
 	return restoredObj;
 }
 var DraggableDiv = function(position) {
-	this.classes = 'draggable-div box-shadow-2dp';
+	this.classes = ['draggable-div', 'box-shadow-2dp'];
 
     if(position === 'left'){
         this.position = 'left';
-        this.classes += ' left';
+        this.classes.push('left');
     }else if(position === 'right'){
         this.position = 'right';
-        this.classes += ' right';
+        this.classes.push(' right');
     }
     this.draggable = true;
     this.ondragstart = drag;	
@@ -223,7 +270,9 @@ var DraggableDiv = function(position) {
 DraggableDiv.prototype.render = function(){
 	var div = document.createElement('div');
 	
-	div.className = this.classes;
+	for(var i = 0; i < this.classes.length - 1; i++)
+		div.className += this.classes[i] + ' ';
+	div.className += this.classes[i];
     div.id = this.id;
     if(this.draggable)
         div.setAttribute('draggable', true);
@@ -297,8 +346,6 @@ Weather.prototype.apiCall = 'http://api.openweathermap.org/data/2.5/weather?zip=
 Weather.prototype.apiKey = 'b25900a396db73aaf71e7f373b4ca5d6';
 Weather.prototype.render = function(){
 	var div = DraggableDiv.prototype.render.call(this);
-	console.log(this.current.cod);
-	
 	var background = document.createElement('div');
 	background.className = 'weather-background';
 	if((this.city !== undefined) && (this.current.cod === 200)){
@@ -440,14 +487,14 @@ Weather.prototype.getCurrentWeather = function (zipCode, countryCode) {
 }
 
 var DraggableDock = function(position) {
-	this.classes = 'draggable-div-dock';
+	this.classes = ['draggable-div-dock'];
 
     if(position === 'left'){
         this.position = 'left';
-        this.classes += ' left';
+        this.classes.push('left');
     }else if(position === 'right'){
         this.position = 'right';
-        this.classes += ' right';
+        this.classes.push('right');
     }
     elementCounts.docks++;
     this.id = 'dock-' + elementCounts.docks;
