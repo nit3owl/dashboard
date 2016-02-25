@@ -399,6 +399,8 @@ Weather.prototype.render = function(){
 
 	var inputBlock = document.createElement('div');
 	inputBlock.className = 'inputBlock';
+	var form = document.createElement('form');
+	form.addEventListener('submit', this.weatherSearch, false); 
 	var zipInput = document.createElement('input');
 	zipInput.type = 'text';
 	zipInput.setAttribute = 'required';
@@ -407,6 +409,7 @@ Weather.prototype.render = function(){
 	else
 		zipInput.placeholder = 'Zip Code'
 	zipInput.className = 'item';
+	form.appendChild(zipInput);
 	var countryDropdown = getCountryDropdown();
 	countryDropdown.className = 'item';
 	var button = document.createElement('div');
@@ -416,7 +419,7 @@ Weather.prototype.render = function(){
 	button.appendChild(icon);
 	button.addEventListener('click', this.weatherSearch, false); 
 
-	inputBlock.appendChild(zipInput);
+	inputBlock.appendChild(form);
 	inputBlock.appendChild(countryDropdown);
 	inputBlock.appendChild(button);
 
@@ -424,8 +427,7 @@ Weather.prototype.render = function(){
 
 	return div;
 }
-
-Weather.prototype.weatherSearch = function() {
+Weather.prototype.weatherSearch = function(e) {
 	var parent = getParentDraggableDiv(this);
 	var zip = parent.getElementsByTagName('input')[0].value;
 	var country = parent.getElementsByTagName('select')[0].value;
@@ -435,6 +437,7 @@ Weather.prototype.weatherSearch = function() {
 	}else{
 		//validation message
 	}
+	e.stopPropogation();
 }
 
 Weather.prototype.getCurrentWeather = function (zipCode, countryCode) {
@@ -452,7 +455,6 @@ Weather.prototype.getCurrentWeather = function (zipCode, countryCode) {
 	var bindWeatherData = function() {
 		if(request.readyState === 4 && request.status === 200){
 			var result =  JSON.parse(request.responseText);
-			console.log(result);
 			this.current.cod = result['cod'];
 			if(result['cod'] === 200){				
 				this.city = result['name'];
