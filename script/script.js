@@ -49,7 +49,7 @@ window.onload = function () {
 
     document.getElementById('note').addEventListener('click', addNote, false);
     document.getElementById('weather').addEventListener('click', addWeather, false);
-    document.getElementById('dice').addEventListener('click', addDice , false);
+    document.getElementById('dice').addEventListener('click', addDice, false);
 
 }
 
@@ -245,7 +245,7 @@ var restoreObject = function (object) {
             restoredObj = new Weather();
             break;
 
-        case 'dice' :
+        case 'dice':
             restoredObj = new Dice();
             break;
     }
@@ -349,7 +349,7 @@ Weather.prototype.apiKey = 'b25900a396db73aaf71e7f373b4ca5d6';
 Weather.prototype.render = function () {
     var div = DraggableDiv.prototype.render.call(this);
     var background = document.createElement('div');
-    background.className = 'weather-background';
+    background.className = 'light-background';
     if ((this.city !== undefined) && (this.current.cod === 200)) {
         var weatherMain = document.createElement('div');
         weatherMain.className = 'weather-main';
@@ -497,6 +497,54 @@ var Dice = function (position) {
 }
 Dice.prototype = Object.create(DraggableDiv.prototype);
 Dice.prototype.constructor = DraggableDiv;
+Dice.prototype.render = function () {
+    var div = DraggableDiv.prototype.render.call(this);
+    var background = document.createElement('div');
+    background.className = 'light-background';
+    var canvas = document.createElement('canvas');
+    canvas.className = 'canvas';
+    canvas.id = 'canvas-' + elementCounts.dice;
+    background.appendChild(canvas);
+
+    var inputBlock = document.createElement('div');
+    inputBlock.className = 'inputBlock';
+
+    var select = document.createElement('select');
+    select.className = 'item';
+    var option = document.createElement('option');
+    option.value = 2;
+    option.text = 'Two Dice';
+    select.appendChild(option);
+
+    option = document.createElement('option');
+    option.value = 1;
+    option.text = '1 Die';
+    select.appendChild(option);
+
+    var button = document.createElement('div');
+    button.className = 'item button-medium box-shadow-6dp';
+    button.textContent = 'Roll Dice';
+    button.addEventListener('click', this.roll, false);
+
+    inputBlock.appendChild(select);
+    inputBlock.appendChild(button);
+
+    div.appendChild(background);
+    div.appendChild(inputBlock);
+
+    return div;
+}
+
+Dice.prototype.roll = function (e) {
+    var parent = getParentDraggableDiv(this);
+    var canvas = parent.getElementsByTagName('div')[0].getElementsByTagName('canvas')[0];
+    //fix this
+    if (canvas.getContext)
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    drawDie(canvas, 30, 10, 120);
+    if (parent.getElementsByTagName('select')[0].value > 1)
+        drawDie(canvas, 160, 10, 120);
+}
 
 var DraggableDock = function (position) {
     this.classes = ['draggable-div-dock'];
