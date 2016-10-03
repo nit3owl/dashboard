@@ -163,9 +163,11 @@ select{
 }
 .inputBlock{
 	width: 331px;
+    height: 25px;
 	margin-left: auto;
 	margin-right: auto;
 	padding: 5px 5px 5px 5px;
+    cursor: default;
 }
 .inputBlock .item{
 	float: left;
@@ -205,14 +207,14 @@ select{
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 45px;
 	min-height: 262px;
-	min-width: 94%;
+	min-width: 95%;
 	resize: none;
 	font-size: 16px;
 	font-weight: bold;
 }
 .light-background{
-	width: 95%;
-    height: 245px;
+	width: 96%;
+    height: 82%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 15px;
@@ -250,12 +252,8 @@ select{
 }
 
 .canvas{
-    width: 95%;
-    height: 95%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 15px;
-    margin-bottom: 5px;
 }
 
 /*http://www.himpfen.com/shadow-effect-bootstrap-components */

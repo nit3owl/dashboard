@@ -7,6 +7,17 @@ class Position {
     }
 }
 
+class RenderContext {
+    constructor(canvas, x, y, size, fallbackElem, clearBeforeRender) {
+        this.canvas = canvas;
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.fallbackElem = fallbackElem;
+        this.clearBeforeRender = clearBeforeRender;
+    }
+}
+
 const one = new Position(0, 0);
 const three = new Position(2, 0);
 const four = new Position(0, 1);
@@ -24,13 +35,21 @@ const positions = [
     [one, three, four, six, seven, nine]
 ];
 
-function drawDie(canvas, x, y, size) {
-    if (canvas.getContext) {
-        let context = canvas.getContext('2d');
+function drawDie(renderContext) {
+    if (renderContext.canvas.getContext) {
+        let context = renderContext.canvas.getContext('2d');
         let dots = randomInt(1, 7);
-        drawSide(context, x, y, size, dots);
+        if (renderContext.clearBeforeRender)
+            context.clearRect(0, 0, renderContext.canvas.width, renderContext.canvas.height);
+        drawSide(context, renderContext.x, renderContext.y, renderContext.size, dots);
     } else {
-        //do fallback render
+        let roll = document.createElement('p');
+        roll.style.fontWeight = 'bold';
+        if (renderContext.clearBeforeRender)
+            roll.textContent = 'Your browswer does not support canvas. Roll : ' + dots;
+        else
+            roll.textContent = 'Roll : ' + dots;
+        fallbackElem.appenChild(roll)
     }
 }
 
@@ -39,7 +58,7 @@ function drawSide(context, x, y, size, dots) {
     context.fillStyle = 'rgb(192,57,43)';
     context.fillRect(x, y, size, size);
 
-    context.clearRect(x + 2, y + 2, size - 4, size - 4);
+    context.clearRect(x + 3, y + 3, size - 6, size - 6);
 
     //render dots
     let quadSize = size / 3;
@@ -53,7 +72,7 @@ function drawSide(context, x, y, size, dots) {
 function drawDot(context, quadX, quadY, size) {
     let half = size / 2;
     context.beginPath();
-    context.arc((quadX + half), (quadY + half), 7, 0, Math.PI * 2);
+    context.arc((quadX + half), (quadY + half), Math.floor(size / 3), 0, Math.PI * 2);
     context.fill();
 }
 
