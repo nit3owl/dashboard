@@ -58,10 +58,16 @@ window.onload = function () {
 }
 
 function resizeCanvases() {
-    var canvases = document.getElementsByTagName('canvas');
-    for (var i = 0; i < canvases.length; i++) {
-        var canvas = canvases[i];
-        var parent = getParentDiv(canvas);
+    let canvases = document.getElementsByTagName('canvas');
+    for (let i = 0; i < canvases.length; i++) {
+        let canvas = canvases[i];
+        resizeCanvas(canvas);
+    }
+}
+
+function resizeCanvas(canvas) {
+    let parent = getParentDiv(canvas);
+    if (parent != null){
         canvas.height = parent.clientHeight - 1;
         canvas.width = parent.clientWidth - 1;
     }
@@ -568,7 +574,7 @@ Dice.prototype.roll = function (e) {
 
     //if canvas has default dimensions, resize to fit div
     if (canvas.width === 300 && canvas.height === 150)
-        resizeCanvases();
+        resizeCanvas(canvas);
 
     size = canvas.height - (Math.floor(canvas.height * 0.25));
     yOffset = (canvas.height - size) / 2;
