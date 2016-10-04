@@ -22,6 +22,8 @@ refresh.
 The weather widget allows the user to search for the current forecast by zipcode/country. It displays the last time the forecast
 was loaded. Upon refresh, the app will update a forecast that is 5 minutes old or older.
 
+###Dice
+The dice widget gives the user the option of rolling one or two six-sided dice. It renders the dice visually using cavnas.
 
 ##Acknowledgements
 While this app doesnt use external frameworks, it does rely on the work of more talented arists than I.
