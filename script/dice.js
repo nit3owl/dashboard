@@ -41,7 +41,11 @@ function drawDie(renderContext) {
         let dots = randomInt(1, 7);
         if (renderContext.clearBeforeRender)
             context.clearRect(0, 0, renderContext.canvas.width, renderContext.canvas.height);
-        drawSide(context, renderContext.x, renderContext.y, renderContext.size, dots);
+
+        //these actions are currently split in anticipation of adding an animation before rendering dots
+        drawCube(context, renderContext.x, renderContext.y, renderContext.size, dots);
+        drawDots(context, renderContext.x, renderContext.y, renderContext.size, dots);
+
     } else {
         let roll = document.createElement('p');
         roll.style.fontWeight = 'bold';
@@ -49,20 +53,45 @@ function drawDie(renderContext) {
             roll.textContent = 'Your browswer does not support canvas. Roll : ' + dots;
         else
             roll.textContent = 'Roll : ' + dots;
-        fallbackElem.appenChild(roll)
+        fallbackElem.appendChild(roll);
     }
 }
 
-function drawSide(context, x, y, size, dots) {
-    //create outline
-    context.fillStyle = 'rgb(192,57,43)';
+function drawCube(context, x, y, size, dots) {
+    //draw face
+    context.fillStyle = 'rgb(247, 216, 212)';
     context.fillRect(x, y, size, size);
 
-    context.clearRect(x + 3, y + 3, size - 6, size - 6);
+    //draw top 
+    context.beginPath();
+    context.moveTo(x + 1, y);
+    context.lineTo(x + (size * .375), y - (size * .25));
+    context.lineTo(x + size * 1.375, y - (size * .25));
+    context.lineTo(x + size, y);
 
-    //render dots
+    let gradient = context.createLinearGradient(x, y, x, y - (size * .25));
+    gradient.addColorStop(0, 'rgb(243, 197, 190)');
+    gradient.addColorStop(1, 'rgb(192,57,43)');
+    context.fillStyle = gradient;
+    context.fill();
+
+    //draw side
+    context.beginPath();
+    context.moveTo(x + size, y + size);
+    context.lineTo(x + size * 1.375, y + (size * .75));
+    context.lineTo(x + size * 1.375, y - (size * .25));
+    context.lineTo(x + size, y);
+    context.lineTo(x + size, y + size);
+
+    gradient = context.createLinearGradient(x + size, y, x + size * 1.375, y);
+    gradient.addColorStop(0, 'rgb(243, 197, 190)');
+    gradient.addColorStop(1, 'rgb(192,57,43)');
+    context.fillStyle = gradient;
+    context.fill();
+}
+
+function drawDots(context, x, y, size, dots) {
     let quadSize = size / 3;
-
     for (let i = 0; i < positions[dots - 1].length; i++) {
         let position = positions[dots - 1][i];
         drawDot(context, (x + (quadSize * position.multX)), (y + (quadSize * position.multY)), quadSize);
@@ -73,6 +102,10 @@ function drawDot(context, quadX, quadY, size) {
     let half = size / 2;
     context.beginPath();
     context.arc((quadX + half), (quadY + half), Math.floor(size / 3), 0, Math.PI * 2);
+    let gradient = context.createRadialGradient((quadX + half), (quadY + half), half, (quadX + half), (quadY + half), half / 4);
+    gradient.addColorStop(0, 'rgb(217, 102, 89)');
+    gradient.addColorStop(1, 'rgb(208, 63, 47)');
+    context.fillStyle = gradient;
     context.fill();
 }
 

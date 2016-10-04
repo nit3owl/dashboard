@@ -563,7 +563,7 @@ Dice.prototype.render = function () {
     return div;
 }
 
-Dice.prototype.roll = function (e) {
+Dice.prototype.roll = function () {
     var parentDraggable = getParentDraggableDiv(this);
     var canvas = parentDraggable.getElementsByTagName('div')[0].getElementsByTagName('canvas')[0];
     var fallback = getParentDiv(canvas);
@@ -576,15 +576,16 @@ Dice.prototype.roll = function (e) {
     if (canvas.width === 300 && canvas.height === 150)
         resizeCanvas(canvas);
 
-    size = canvas.height - (Math.floor(canvas.height * 0.25));
+    size = canvas.height - (Math.floor(canvas.height * 0.5));
     yOffset = (canvas.height - size) / 2;
 
     if (parseInt(parentDraggable.getElementsByTagName('select')[0].value) === 1) {
-        xOffset = (canvas.width / 2) - (size / 2);
+        //technically, this isn't exactly centered, but it looks odd cented due to gradient
+        xOffset = (canvas.width / 2) - ((size * 1.5) / 2);
         renderContext = new RenderContext(canvas, xOffset, yOffset, size, fallback, true);
         drawDie(renderContext);
     } else {
-        xOffset = Math.floor((canvas.width - (size * 2)) / 3);
+        xOffset = Math.floor((canvas.width - (size * 2.5)) / 3);
         //draw die 1
         renderContext = new RenderContext(canvas, xOffset, yOffset, size, fallback, true);
         drawDie(renderContext);
