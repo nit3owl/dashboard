@@ -41,33 +41,33 @@ function drawDie(renderContext) {
     let dots = randomInt(1, 7);
     if (renderContext.canvas.getContext) {
         let context = renderContext.canvas.getContext('2d');
-        
+
         if (renderContext.clearBeforeRender)
             context.clearRect(0, 0, renderContext.canvas.width, renderContext.canvas.height);
 
-        requestAnimationFrame(function() {
+        requestAnimationFrame(function () {
             shakeCube(renderContext);
         });
 
-        setTimeout(function(){
+        setTimeout(function () {
             cancelAnimationFrame(reqRef.pop());
             context.clearRect(renderContext.x - 1, 0, renderContext.x + renderContext.size, renderContext.canvas.height);
             drawCube(context, renderContext.x, renderContext.y, renderContext.size);
             drawDots(context, renderContext.x, renderContext.y, renderContext.size, dots);
         }, 750);
     } else {
-        renderContext.fallbackElem.innerHTML =  'Your browser does not support canvas.';
+        renderContext.fallbackElem.innerHTML = 'Your browser does not support canvas.';
     }
 }
 
-function shakeCube(renderContext){
+function shakeCube(renderContext) {
     let context = renderContext.canvas.getContext('2d');
     let wobble = Math.sin(Date.now() / 30) * (window.innerHeight / 50);
 
     context.clearRect(renderContext.x - 1, 0, renderContext.x + renderContext.size, renderContext.canvas.height);
     drawCube(context, renderContext.x, renderContext.y + wobble, renderContext.size);
 
-    reqRef.push(requestAnimationFrame(function() {
+    reqRef.push(requestAnimationFrame(function () {
         shakeCube(renderContext);
     }));
 }
