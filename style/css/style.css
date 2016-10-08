@@ -1,31 +1,31 @@
 body{
-	font-family: 'Roboto', sans-serif;
-	margin: 0px;
-	background: #496683;
+    font-family: 'Roboto', sans-serif;
+    margin: 0px;
+    background: #496683;
 }
 .head{
-	background: #2C3E50;	
-	color: #ECF0F1;
-	font-weight: bold;
-	height: 60px;
-	line-height: 60px;
-	letter-spacing: 1px;
-	width: 100%;
+    background: #2C3E50;
+    color: #ECF0F1;
+    font-weight: bold;
+    height: 60px;
+    line-height: 60px;
+    letter-spacing: 1px;
+    width: 100%;
 }
 .head .main{
-	padding: 10px;
-	margin: 10px;
-	font-size: 30px;
+    padding: 10px;
+    margin: 10px;
+    font-size: 30px;
 }
 .head a, a:visited{
-	text-decoration: none;
-	color: #ECF0F1;
-	padding: 10px;
-	margin: 10px;
-	font-size: 20px;
+    text-decoration: none;
+    color: #ECF0F1;
+    padding: 10px;
+    margin: 10px;
+    font-size: 20px;
 }
 .head a:hover{
-	color: #C0392B;
+    color: #C0392B;
 }
 .wrapper {
     display: -ms-flexbox;
@@ -33,107 +33,107 @@ body{
     display: flex;
 }
 .wrapper .left{
-	margin-left: 40px;
-	margin-right: 20px;
+    margin-left: 40px;
+    margin-right: 20px;
 }
 .wrapper .right{
-	margin-right: 40px;
-	margin-left: 20px;
+    margin-right: 40px;
+    margin-left: 20px;
 }
 .top-row{
-	margin-top: 10px;
+    margin-top: 10px;
 }
 .draggable-div{
-	-webkit-flex: 1;
+    -webkit-flex: 1;
     -ms-flex: 1;
-    flex: 1;    
+    flex: 1;
     padding: 10px;
-	margin-top: 10px;	
-	margin-bottom: 10px;
-	min-height: 300px;	
-	border-radius: 5px;
-	background: #2C3E50;
-	cursor: move;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    min-height: 300px;
+    border-radius: 5px;
+    background: #2C3E50;
+    cursor: move;
 }
 .draggable-div-dock{
-	-webkit-flex: 1;
+    -webkit-flex: 1;
     -ms-flex: 1;
-    flex: 1;    
+    flex: 1;
     padding: 10px;
-	margin-top: 10px;	
-	margin-bottom: 10px;
-	min-height: 300px;	
-	border: 2px dotted #ECF0F1;
-	border-radius: 5px;
-	background: transparent;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    min-height: 300px;
+    border: 2px dotted #ECF0F1;
+    border-radius: 5px;
+    background: transparent;
 }
 .left-nav{
-	position: fixed;
+    position: fixed;
     top: 60px;
     left: 0px;
-	height: 100%;
-	width: 10px;
-	background: #C0392B;
+    height: 100%;
+    width: 10px;
+    background: #C0392B;
 }
 .icon{
-	position: fixed;
-	background: #C0392B;
-	color: #FFFFFF;
-	-moz-border-radius: 50%;
-	-webkit-border-radius: 50%;
-	border-radius: 50%;
-	width: 60px;
-	height: 60px;
-	cursor: pointer; 
-	cursor: hand;
+    position: fixed;
+    background: #C0392B;
+    color: #FFFFFF;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    cursor: pointer; 
+    cursor: hand;
 }
 .icon:active{
-	box-shadow: 0 12px 18px 2px rgba(0, 0, 0, .14), 0 5px 23px 4px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
+    box-shadow: 0 12px 18px 2px rgba(0, 0, 0, .14), 0 5px 23px 4px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
 }
 .small-icon{
-	background: #C0392B;
-	color: #FFFFFF;
-	-moz-border-radius: 50%;
-	-webkit-border-radius: 50%;
-	border-radius: 50%;
-	width: 45px;
-	height: 45px;
-	cursor: pointer; 
-	cursor: hand;
-	position: absolute;
-	margin-top: 245px;
-	margin-left: 575px;
+    background: #C0392B;
+    color: #FFFFFF;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer; 
+    cursor: hand;
+    position: absolute;
+    margin-top: 245px;
+    margin-left: 575px;
 }
 .small-icon:active{
-	box-shadow: 0 12px 18px 2px rgba(0, 0, 0, .14), 0 5px 23px 4px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
+    box-shadow: 0 12px 18px 2px rgba(0, 0, 0, .14), 0 5px 23px 4px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
 }
 .small-icon i{
-	line-height: 45px;
-	margin-left: 9px;
+    line-height: 45px;
+    margin-left: 9px;
 }
 input{
-	background: #2C3E50;
-	display:block;
-	width: 85px;
-	outline: 0;
-	border:none;
-	border-bottom:1px solid #ECF0F1;
-	color: #C0392B;
-	text-align: center;
+    background: #2C3E50;
+    display:block;
+    width: 85px;
+    outline: 0;
+    border:none;
+    border-bottom:1px solid #ECF0F1;
+    color: #C0392B;
+    text-align: center;
 }
 input:focus{
-	border-bottom:2px solid #C0392B;
+    border-bottom:2px solid #C0392B;
 }
 select{
-	width: 175px;
-	background: #2C3E50;
-	outline: 0;
-	border:none;
-	border-bottom:1px solid #ECF0F1;
-	color: #ECF0F1;
+    width: 175px;
+    background: #2C3E50;
+    outline: 0;
+    border:none;
+    border-bottom:1px solid #ECF0F1;
+    color: #ECF0F1;
 }
 .button{
-	background: #C0392B;
+    background: #C0392B;
     color: #FFFFFF;
     border-radius: 2px;
     padding: 2px;
@@ -141,69 +141,80 @@ select{
     width: 35px;
 }
 .button:active{
-	box-shadow: 0 12px 18px 2px rgba(0, 0, 0, .14), 0 5px 23px 4px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
+    box-shadow: 0 12px 18px 2px rgba(0, 0, 0, .14), 0 5px 23px 4px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
+}
+.button-medium{
+    background: #C0392B;
+    color: #FFFFFF;
+    border-radius: 2px;
+    padding: 2px;
+    text-align: center;
+    width: 100px;
+    font-weight: bold;
 }
 .error{
-	font-size: 30px;
-	display: flex;
+    font-size: 30px;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: inherit;
-	color: #C0392B;	
+    color: #C0392B;
 }
 .inputBlock{
-	width: 331px;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 5px 5px 5px 5px;
+    width: 331px;
+    height: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px 5px 5px 5px;
+    cursor: default;
 }
 .inputBlock .item{
-	float: left;
-	margin-right: 10px;	
+    float: left;
+    margin-right: 10px;
     font-size: 18px;
 }
 .icon .money{
-	margin-left: 4px;
+    margin-left: 4px;
 }
 .icon i{
-	line-height: 60px;
-	margin-left: 10px;
+    line-height: 60px;
+    margin-left: 10px;
 }
-.icon#trash{	
+.icon#trash{
     bottom: 20px;
     right: 20px;
 }
-.icon#add{	
+.icon#add{
     bottom: 20px;
     left: 20px;
     overflow:hidden;
-	transition: height 450ms, width 450ms, border-radius 450ms;
-	-moz-transition: height 450ms, width 450ms, border-radius 450ms;
-	-webkit-transition: height 450ms, width 450ms, border-radius 450ms;
+    transition: height 450ms, width 450ms, border-radius 450ms;
+    -moz-transition: height 450ms, width 450ms, border-radius 450ms;
+    -webkit-transition: height 450ms, width 450ms, border-radius 450ms;
 }
 .icon#add:hover{
-	height: 310px;
+    height: 310px;
     border-radius: 15px;
 }
 .note{
-	background: #ECF0F1;
-	margin: 15px;
-	text-align: left;
-	height: 90%;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 45px;
-	min-height: 262px;
-	min-width: 94%;
-	resize: none;
-	font-size: 16px;
-	font-weight: bold;
+    background: #ECF0F1;
+    margin: 15px;
+    text-align: left;
+    height: 90%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 45px;
+    min-height: 262px;
+    min-width: 95%;
+    resize: none;
+    font-size: 16px;
+    font-weight: bold;
 }
-.weather-background{
-	width: 95%;
-    height: 245px;
+.light-background{
+    width: 96%;
+    height: 82%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 15px;
@@ -212,33 +223,39 @@ select{
     border-radius: 2px;
 }
 .weather-main{
-	margin-left: 15px;
+    margin-left: 15px;
     margin-right: 15px;
     padding-top: 5px;
 }
 .weather-main .row1{
-	font-size: 30px;
-	font-weight: bold;
+    font-size: 30px;
+    font-weight: bold;
 }
 .weather-main .row2{
-	font-size: 20px;
-	float: left;
+    font-size: 20px;
+    float: left;
 }
 .weather-main .temp{
-	font-size: 60px;
-	float: right;
+    font-size: 60px;
+    float: right;
 }
 .weather-icon{
-	font-size: 80px;
-	margin-top: 20px;
-	margin-left: auto;
-	margin-right: auto;
+    font-size: 80px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .weather-bot{
-	float: left;
+    float: left;
     clear: both;
     margin-top: 135px;
 }
+
+.canvas{
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /*http://www.himpfen.com/shadow-effect-bootstrap-components */
 .box-shadow-2dp {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
@@ -262,26 +279,26 @@ select{
     box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2);
 }
 @media screen and (max-width: 768px) {
-	.wrapper{
-		display: block;
-	}
-	.wrapper .left{
-		margin-left: 20px;
-		margin-right: 20px;
-	}
-	.wrapper .right{
-		margin-right: 20px;
-		margin-left: 20px;
-	}
-	.top-row{
-		margin-top: 0px;
-	}
-	.icon#trash{	
-	    bottom: 10px;
-	    right: 10px;
-	}
-	.icon#add{	
-	    bottom: 10px;
-	    left: 10px;
-	}
+    .wrapper{
+        display: block;
+    }
+    .wrapper .left{
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    .wrapper .right{
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+    .top-row{
+        margin-top: 0px;
+    }
+    .icon#trash{
+        bottom: 10px;
+        right: 10px;
+    }
+    .icon#add{
+        bottom: 10px;
+        left: 10px;
+    }
 }
