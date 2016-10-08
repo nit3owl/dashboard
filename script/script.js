@@ -51,13 +51,42 @@ window.onload = function () {
     document.getElementById('weather').addEventListener('click', addWeather, false);
     document.getElementById('dice').addEventListener('click', addDice, false);
 
+    window.addEventListener('resize', resizeCanvases, false);
+
+    resizeCanvases();
+
 }
 
-function getParentDraggableDiv(div) {
-    while (!~div.className.indexOf('draggable-div')) {
-        div = div.parentNode;
+function resizeCanvases() {
+    let canvases = document.getElementsByTagName('canvas');
+    for (let i = 0; i < canvases.length; i++) {
+        let canvas = canvases[i];
+        resizeCanvas(canvas);
     }
-    return div;
+}
+
+function resizeCanvas(canvas) {
+    let parent = getParentDiv(canvas);
+    if (parent != null){
+        canvas.height = parent.clientHeight - 1;
+        canvas.width = parent.clientWidth - 1;
+    }
+}
+
+function getParentDiv(elem) {
+    while (elem !== undefined) {
+        if (elem.parentNode.nodeName === 'DIV')
+            return elem.parentNode;
+        else
+            elem = elem.parentNode;
+    }
+    return null;
+}
+function getParentDraggableDiv(elem) {
+    while (!~elem.className.indexOf('draggable-div')) {
+        elem = elem.parentNode;
+    }
+    return elem;
 }
 function allowDrop(event) {
     event.preventDefault();
@@ -531,19 +560,39 @@ Dice.prototype.render = function () {
 
     div.appendChild(background);
     div.appendChild(inputBlock);
-
     return div;
 }
 
-Dice.prototype.roll = function (e) {
-    var parent = getParentDraggableDiv(this);
-    var canvas = parent.getElementsByTagName('div')[0].getElementsByTagName('canvas')[0];
-    //fix this
-    if (canvas.getContext)
-        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-    drawDie(canvas, 30, 10, 120);
-    if (parent.getElementsByTagName('select')[0].value > 1)
-        drawDie(canvas, 160, 10, 120);
+Dice.prototype.roll = function () {
+    var parentDraggable = getParentDraggableDiv(this);
+    var canvas = parentDraggable.getElementsByTagName('div')[0].getElementsByTagName('canvas')[0];
+    var fallback = getParentDiv(canvas);
+    var size;
+    var yOffset;
+    var xOffset;
+    var renderContext;
+
+    //if canvas has default dimensions, resize to fit div
+    if (canvas.width === 300 && canvas.height === 150)
+        resizeCanvas(canvas);
+
+    size = canvas.height - (Math.floor(canvas.height * 0.5));
+    yOffset = (canvas.height - size) / 2;
+
+    if (parseInt(parentDraggable.getElementsByTagName('select')[0].value) === 1) {
+        //technically, this isn't exactly centered, but it looks odd cented due to gradient
+        xOffset = (canvas.width / 2) - ((size * 1.5) / 2);
+        renderContext = new RenderContext(canvas, xOffset, yOffset, size, fallback, true);
+        drawDie(renderContext);
+    } else {
+        xOffset = Math.floor((canvas.width - (size * 2.5)) / 3);
+        //draw die 1
+        renderContext = new RenderContext(canvas, xOffset, yOffset, size, fallback, true);
+        drawDie(renderContext);
+        //draw die 2
+        renderContext = new RenderContext(canvas, (size + xOffset * 2), yOffset, size, fallback, false);
+        drawDie(renderContext);
+    }
 }
 
 var DraggableDock = function (position) {
