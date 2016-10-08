@@ -74,7 +74,7 @@ function resizeCanvas(canvas) {
 }
 
 function getParentDiv(elem) {
-    while (elem.parentNode !== undefined) {
+    while (elem !== undefined) {
         if (elem.parentNode.nodeName === 'DIV')
             return elem.parentNode;
         else

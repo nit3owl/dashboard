@@ -35,29 +35,44 @@ const positions = [
     [one, three, four, six, seven, nine]
 ];
 
+var reqRef = [];
+
 function drawDie(renderContext) {
+    let dots = randomInt(1, 7);
     if (renderContext.canvas.getContext) {
         let context = renderContext.canvas.getContext('2d');
-        let dots = randomInt(1, 7);
+        
         if (renderContext.clearBeforeRender)
             context.clearRect(0, 0, renderContext.canvas.width, renderContext.canvas.height);
 
-        //these actions are currently split in anticipation of adding an animation before rendering dots
-        drawCube(context, renderContext.x, renderContext.y, renderContext.size, dots);
-        drawDots(context, renderContext.x, renderContext.y, renderContext.size, dots);
+        requestAnimationFrame(function() {
+            shakeCube(renderContext);
+        });
 
+        setTimeout(function(){
+            cancelAnimationFrame(reqRef.pop());
+            context.clearRect(renderContext.x - 1, 0, renderContext.x + renderContext.size, renderContext.canvas.height);
+            drawCube(context, renderContext.x, renderContext.y, renderContext.size);
+            drawDots(context, renderContext.x, renderContext.y, renderContext.size, dots);
+        }, 750);
     } else {
-        let roll = document.createElement('p');
-        roll.style.fontWeight = 'bold';
-        if (renderContext.clearBeforeRender)
-            roll.textContent = 'Your browswer does not support canvas. Roll : ' + dots;
-        else
-            roll.textContent = 'Roll : ' + dots;
-        fallbackElem.appendChild(roll);
+        renderContext.fallbackElem.innerHTML =  'Your browser does not support canvas.';
     }
 }
 
-function drawCube(context, x, y, size, dots) {
+function shakeCube(renderContext){
+    let context = renderContext.canvas.getContext('2d');
+    let wobble = Math.sin(Date.now() / 30) * (window.innerHeight / 50);
+
+    context.clearRect(renderContext.x - 1, 0, renderContext.x + renderContext.size, renderContext.canvas.height);
+    drawCube(context, renderContext.x, renderContext.y + wobble, renderContext.size);
+
+    reqRef.push(requestAnimationFrame(function() {
+        shakeCube(renderContext);
+    }));
+}
+
+function drawCube(context, x, y, size) {
     //draw face
     context.fillStyle = 'rgb(247, 216, 212)';
     context.fillRect(x, y, size, size);
