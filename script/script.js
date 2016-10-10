@@ -332,7 +332,7 @@ class Note extends DraggableDiv {
     }
 
     render() {
-        let div = DraggableDiv.prototype.render.call(this);
+        let div = super.render(this);
         let note = document.createElement('textarea');
         let save = document.createElement('div');
         let saveBtn = document.createElement('i');
@@ -344,22 +344,27 @@ class Note extends DraggableDiv {
         save.className = 'small-icon box-shadow-6dp';
 
         saveBtn.className = 'fa fa-floppy-o fa-2x';
-        saveBtn.addEventListener('click', saveNote, false);
+        saveBtn.addEventListener('click', this.saveNote, false);
         save.appendChild(saveBtn);
         div.appendChild(save);
         div.appendChild(note);
 
         return div;
     }
+
+    saveNote(e) {
+        let parentDiv = getParentDraggableDiv(this);
+        let contents = parentDiv.getElementsByTagName('textarea')[0];
+        //let contents = object.srcElement.parentNode.parentNode.getElementsByTagName('textarea')[0];
+        let note = JSON.parse(localStorage.getItem(parentDiv.id));
+        if (note !== null) {
+            note.contents = contents.value;
+        }
+        localStorage.setItem(note.id, JSON.stringify(note));
+    }
 }
 function saveNote(object) {
-    let parentDiv = getParentDraggableDiv(object.srcElement);
-    let contents = object.srcElement.parentNode.parentNode.getElementsByTagName('textarea')[0];
-    let note = JSON.parse(localStorage.getItem(parentDiv.id));
-    if (note !== null) {
-        note.contents = contents.value;
-    }
-    localStorage.setItem(note.id, JSON.stringify(note));
+
 }
 
 class Weather extends DraggableDiv {
@@ -467,16 +472,17 @@ class Weather extends DraggableDiv {
     }
 
     weatherSearch(e) {
-        var parent = getParentDraggableDiv(this);
-        var zip = parent.getElementsByTagName('input')[0].value;
-        var country = parent.getElementsByTagName('select')[0].value;
+        let parent = getParentDraggableDiv(this);
+        let zip = parent.getElementsByTagName('input')[0].value;
+        let country = parent.getElementsByTagName('select')[0].value;
         if (zip.length > 0 && country.length > 0) {
-            var weather = restoreObject(JSON.parse(localStorage.getItem(parent.id)));
+            let weather = restoreObject(JSON.parse(localStorage.getItem(parent.id)));
             weather.getCurrentWeather(zip, country);
         } else {
             //validation message
         }
-        e.stopPropogation();
+        e.stopPropagation();
+        e.preventDefault();
     }
 
     getCurrentWeather(zipCode, countryCode) {
