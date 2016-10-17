@@ -18,21 +18,21 @@ class RenderContext {
     }
 }
 
-const one = new Position(0, 0);
-const three = new Position(2, 0);
-const four = new Position(0, 1);
-const five = new Position(1, 1);
-const six = new Position(2, 1);
-const seven = new Position(0, 2);
-const nine = new Position(2, 2);
+const ONE = new Position(0, 0);
+const THREE = new Position(2, 0);
+const FOUR = new Position(0, 1);
+const FIVE = new Position(1, 1);
+const SIX = new Position(2, 1);
+const SEVEN = new Position(0, 2);
+const NINE = new Position(2, 2);
 
-const positions = [
-    [five],
-    [three, seven],
-    [three, five, seven],
-    [one, three, seven, nine],
-    [one, three, five, seven, nine],
-    [one, three, four, six, seven, nine]
+const POSITIONS = [
+    [FIVE],
+    [THREE, SEVEN],
+    [THREE, FIVE, SEVEN],
+    [ONE, THREE, SEVEN, NINE],
+    [ONE, THREE, FIVE, SEVEN, NINE],
+    [ONE, THREE, FOUR, SIX, SEVEN, NINE]
 ];
 
 var reqRef = [];
@@ -107,8 +107,8 @@ function drawCube(context, x, y, size) {
 
 function drawDots(context, x, y, size, dots) {
     let quadSize = size / 3;
-    for (let i = 0; i < positions[dots - 1].length; i++) {
-        let position = positions[dots - 1][i];
+    for (let i = 0; i < POSITIONS[dots - 1].length; i++) {
+        let position = POSITIONS[dots - 1][i];
         drawDot(context, (x + (quadSize * position.multX)), (y + (quadSize * position.multY)), quadSize);
     }
 }
